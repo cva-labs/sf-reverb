@@ -1,0 +1,7 @@
+/build*/
+/out/
+/dist/
+/.vs/
+*.user
+*.suo
+.DS_Store
