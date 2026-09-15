@@ -30,7 +30,7 @@ jobs:
       - name: Configure Windows
         if: runner.os == 'Windows'
         shell: pwsh
-        run: cmake -S . -B out -G "Visual Studio 17 2022" -A x64
+        run: cmake -S . -B out
 
       - name: Configure macOS Universal
         if: runner.os == 'macOS'
