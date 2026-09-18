@@ -35,13 +35,25 @@ jobs:
       - name: Configure macOS Universal
         if: runner.os == 'macOS'
         shell: bash
-        run: cmake -S . -B out -G Xcode "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64"
+        run: cmake -S . -B out -G Xcode "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
 
       - name: Build
         run: cmake --build out --config Release --parallel 4
 
       - name: Test
         run: ctest --test-dir out -C Release --output-on-failure
+
+      - name: Verify macOS compatibility
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          bundle="out/SuperformulaReverb_artefacts/Release/VST3/Superformula Reverb.vst3"
+          binary="$bundle/Contents/MacOS/Superformula Reverb"
+          test "$(plutil -extract LSMinimumSystemVersion raw "$bundle/Contents/Info.plist")" = "11.0"
+          lipo -archs "$binary" | grep -q 'arm64'
+          lipo -archs "$binary" | grep -q 'x86_64'
+          test "$(otool -l "$binary" | awk '/minos/{print $2}' | sort -u)" = "11.0"
+          codesign --verify --deep --strict "$bundle"
 
       - name: Stage VST3
         shell: bash
@@ -58,7 +70,7 @@ jobs:
       - name: Create macOS archive
         if: runner.os == 'macOS'
         shell: bash
-        run: ditto -c -k --sequesterRsrc --keepParent package "${{ matrix.artifact }}.zip"
+        run: cd package && zip -r "../${{ matrix.artifact }}.zip" .
 
       - uses: actions/upload-artifact@v4
         with:
@@ -80,4 +92,11 @@ jobs:
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${GITHUB_REF_NAME}" release-assets/*.zip --title "Superformula Reverb ${GITHUB_REF_NAME}" --notes-file RELEASE_NOTES.md
+        shell: bash
+        run: |
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" release-assets/*.zip --clobber
+            gh release edit "${GITHUB_REF_NAME}" --title "Superformula Reverb ${GITHUB_REF_NAME}" --notes-file RELEASE_NOTES.md
+          else
+            gh release create "${GITHUB_REF_NAME}" release-assets/*.zip --title "Superformula Reverb ${GITHUB_REF_NAME}" --notes-file RELEASE_NOTES.md
+          fi
