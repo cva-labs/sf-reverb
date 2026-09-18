@@ -14,7 +14,7 @@ Superformula Reverb is a geometry-driven VST3 effect by CVA Labs. Its room shape
 - Room scale, decay, pre-delay, and dry/wet controls
 - Stereo and mono processing
 - Host automation and project-state recall
-- Windows x64 and macOS Universal VST3 releases
+- Windows x64 and macOS Universal VST3 releases (macOS 11.0 or newer)
 
 ## Acoustic model
 
@@ -48,7 +48,7 @@ or the system-wide directory:
 /Library/Audio/Plug-Ins/VST3
 ```
 
-The macOS build is unsigned and not notarized. On first use, macOS may require approval in **System Settings → Privacy & Security**. Rescan plugins in your DAW after installation.
+The macOS Universal build supports Apple Silicon and Intel Macs running macOS 11.0 or newer. It is ad-hoc signed and is not notarized. On first use, macOS may require approval in **System Settings → Privacy & Security**. Rescan plugins in your DAW after installation.
 
 ## Building from source
 
@@ -68,7 +68,7 @@ Windows:
 macOS:
 
 ```bash
-cmake -S . -B out -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+cmake -S . -B out -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
 cmake --build out --config Release --parallel
 ctest --test-dir out -C Release --output-on-failure
 ```

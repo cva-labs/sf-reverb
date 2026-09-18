@@ -7,8 +7,8 @@ The VST3 combines an interactive 3D Gielis superformula room with a geometry-dri
 ## Downloads
 
 - **Windows x64:** `Superformula-Reverb-Windows-x64.zip`
-- **macOS Universal:** `Superformula-Reverb-macOS-Universal.zip` for Apple Silicon and Intel Macs
+- **macOS Universal:** `Superformula-Reverb-macOS-Universal.zip` for Apple Silicon and Intel Macs running macOS 11.0 or newer
 
-The macOS build is unsigned and not notarized. Installation and first-launch instructions are included in the README.
+The macOS build is ad-hoc signed and is not notarized. Installation and first-launch instructions are included in the README.
 
 Licensed under GNU AGPLv3. Source code is available in this repository.
