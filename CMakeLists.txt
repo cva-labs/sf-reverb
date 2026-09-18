@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
+set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum supported macOS version")
 project(SuperformulaReverb VERSION 1.0.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(JUCE_PATH "" CACHE PATH "Existing JUCE source checkout")
